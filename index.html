@@ -662,7 +662,7 @@ function showFlashCard(){
   renderNotes(card.id);
 }
 
-flashCardDiv.addEventListener("click", (e) => {
+flashCardDiv.addEventListener("pointerdown", (e) => {
   e.preventDefault();
 
   const now = Date.now();
