@@ -640,9 +640,18 @@ function showFlashCard(){
 
   const card = list[index];
 
-  flashCardDiv.innerHTML = !showingAnswer
-    ? `<strong>Question:</strong><br><br>${card.question}`
-    : `<strong>Answer:</strong><br><br>${card.answer}<br><br><strong>Explanation:</strong><br>${card.explanation}`;
+  if(showingAnswer){
+
+  flashCardDiv.innerHTML =
+    `<strong>Answer:</strong><br><br>${card.answer}` +
+    `<br><br><strong>Explanation:</strong><br>${card.explanation}`;
+
+}else{
+
+  flashCardDiv.innerHTML =
+    `<strong>Question:</strong><br><br>${card.question}`;
+
+}
 
   document.getElementById("statsFlash").innerText = `Card ${index+1} of ${list.length}`;
 
@@ -652,9 +661,14 @@ function showFlashCard(){
   renderNotes(card.id);
 }
 
-flashCardDiv.addEventListener("click", ()=>{
+flashCardDiv.addEventListener("click", (e)=>{
+
+  e.preventDefault();
+
   showingAnswer = !showingAnswer;
+
   showFlashCard();
+
 });
 
 document.getElementById("btnKnow").onclick = ()=>{
