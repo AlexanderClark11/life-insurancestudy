@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<meta name="theme-color" content="#0f172a">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<link rel="apple-touch-icon" sizes="192x192" href="./icon-192.png">
+<link rel="icon" sizes="192x192" href="./icon-192.png">
+<link rel="manifest" href="./manifest.webmanifest">
+
+<title>LIPractice</title>
+
+<style>
+
+* {
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  background:
+    radial-gradient(circle at 20% 20%, #1e293b, #020617);
+
+  color: #e2e8f0;
+  overflow: hidden;
+}
+
+/* ===================== */
+/* COLORS */
+/* ===================== */
+
+:root{
+  --bg1:#020617;
+  --bg2:#0f172a;
+
+  --panel: rgba(30,41,59,0.7);
+  --panel2: rgba(51,65,85,0.6);
+
+  --accent1:#6366f1;
+  --accent2:#22d3ee;
+
+  --good:#22c55e;
+  --bad:#ef4444;
+
+  --muted:#94a3b8;
+
+  --blur: blur(14px);
+}
+
+/* ===================== */
+/* APP ROOT */
+/* ===================== */
+
+#app {
+
+  width: 100%;
+  height: 100dvh;
+
+  display: flex;
+  flex-direction: column;
+
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* ===================== */
+/* TOP TABS */
+/* ===================== */
+
+.top-tabs {
+
+  display:flex;
+  gap:10px;
+
+  padding:12px 14px;
+
+  background: rgba(2,6,23,0.6);
+  backdrop-filter: var(--blur);
+
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+
+.tab-btn {
+
+  padding:12px 18px;
+
+  border-radius:12px;
+  border:none;
+
+  cursor:pointer;
+
+  background: rgba(51,65,85,.5);
+  color:white;
+
+  font-weight:600;
+
+  transition:.2s;
+}
+
+.tab-btn:hover {
+  background: rgba(71,85,105,.6);
+}
+
+.tab-btn.active {
+
+  background: linear-gradient(
+    90deg,
+    var(--accent1),
+    var(--accent2)
+  );
+
+  box-shadow: 0 0 10px rgba(99,102,241,.6);
+}
+
+/* ===================== */
+/* VIEW LAYOUT */
+/* ===================== */
+
+.view {
+  flex:1;
+  display:none;
+}
+
+.view.active {
+  display:flex;
+}
+
+.container {
+
+  flex:1;
+
+  display:flex;
+
+  gap:14px;
+  padding:14px;
+}
+
+.main {
+
+  flex:1;
+
+  display:flex;
+  flex-direction:column;
+
+  gap:14px;
+}
+
+.sidebar {
+
+  width:360px;
+
+  display:flex;
+  flex-direction:column;
+
+  gap:14px;
+}
+
+/* ===================== */
+/* GLASS PANELS */
+/* ===================== */
+
+.panel,
+.card {
+
+  background: var(--panel);
+
+  backdrop-filter: var(--blur);
+
+  border-radius:18px;
+
+  border:1px solid rgba(255,255,255,.06);
+
+  box-shadow:
+    0 4px 20px rgba(0,0,0,.4);
+}
+
+/* ===================== */
+/* CARD */
+/* ===================== */
+
+.card {
+
+  flex:1;
+
+  padding:22px;
+
+  overflow:auto;
+
+  font-size: clamp(16px, 2vw, 20px);
+
+  line-height:1.6;
+
+  cursor:pointer;
+}
+
+/* ===================== */
+/* PANEL */
+/* ===================== */
+
+.panel {
+
+  padding:16px;
+}
+
+/* ===================== */
+/* PROGRESS */
+/* ===================== */
+
+.progress-container {
+
+  height:8px;
+
+  border-radius:999px;
+
+  background: rgba(255,255,255,.06);
+
+  overflow:hidden;
+}
+
+.progress-bar {
+
+  height:100%;
+
+  width:0%;
+
+  background: linear-gradient(
+    90deg,
+    var(--accent1),
+    var(--accent2)
+  );
+
+  transition:.3s;
+}
+
+/* ===================== */
+/* BUTTONS */
+/* ===================== */
+
+.btn-row {
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.action-btn {
+
+  flex:1;
+
+  padding:12px;
+
+  border-radius:12px;
+
+  border:none;
+
+  cursor:pointer;
+
+  font-weight:700;
+
+  color:white;
+
+  transition:.15s;
+}
+
+.action-btn:hover {
+  transform: translateY(-1px);
+}
+
+.know {
+  background: linear-gradient(90deg,#16a34a,#22c55e);
+}
+
+.dont {
+  background: linear-gradient(90deg,#dc2626,#ef4444);
+}
+
+.review {
+  background: rgba(71,85,105,.6);
+}
+
+/* ===================== */
+/* STATS */
+/* ===================== */
+
+.stat-line {
+
+  display:flex;
+
+  justify-content:space-between;
+
+  margin-bottom:8px;
+
+  color: var(--muted);
+}
+
+/* ===================== */
+/* NOTES */
+/* ===================== */
+
+.note-item {
+
+  background: rgba(51,65,85,.6);
+
+  padding:10px;
+
+  border-radius:10px;
+
+  margin-bottom:10px;
+}
+
+textarea {
+
+  width:100%;
+
+  border:none;
+
+  border-radius:12px;
+
+  padding:10px;
+
+  background:#020617;
+
+  color:white;
+
+  resize:vertical;
+}
+
+/* ===================== */
+/* QUIZ */
+/* ===================== */
+
+.choice {
+
+  background: rgba(51,65,85,.6);
+
+  padding:14px;
+
+  border-radius:12px;
+
+  margin-top:10px;
+
+  cursor:pointer;
+
+  transition:.15s;
+}
+
+.choice:hover {
+  background: rgba(71,85,105,.8);
+}
+
+.choice.correct {
+  background: var(--good);
+}
+
+.choice.wrong {
+  background: var(--bad);
+}
+
+/* ===================== */
+/* CONTROLS */
+/* ===================== */
+
+select,
+.small {
+
+  padding:10px 12px;
+
+  border:none;
+
+  border-radius:12px;
+
+  background: rgba(51,65,85,.7);
+
+  color:white;
+
+  font-weight:600;
+}
+
+.small {
+  cursor:pointer;
+}
+
+/* ===================== */
+/* MOBILE */
+/* ===================== */
+
+@media (max-width:900px){
+
+  .container {
+    flex-direction:column;
+  }
+
+  .sidebar {
+    width:100%;
+  }
+
+}
+
+/* Rotation / mobile */
+@media (max-width: 900px) {
+  html, body { overflow: auto; } /* allow page to breathe on tiny screens */
+  #app { height: auto; min-height: 100dvh; }
+  .container { flex-direction: column; height: auto; }
+  .sidebar { width: 100%; min-width: 0; }
+  .card { padding: 16px; }
+}
+@media screen and (orientation: landscape) and (max-width: 1024px){
+  /* landscape phone/tablet: keep side-by-side if possible */
+  .container { flex-direction: row; }
+  .sidebar { width: 320px; }
+}
+</style>
+</head>
+
+<body>
+<div id="app">
+
+  <div class="top-tabs">
+    <button class="tab-btn active" id="tabFlash" onclick="switchView('flash')">Flashcards</button>
+    <button class="tab-btn" id="tabQuiz" onclick="switchView('quiz')">Multiple Choice</button>
+  </div>
+
+  <!-- FLASHCARDS VIEW -->
+  <div class="view active" id="viewFlash">
+    <div class="container">
+
+      <div class="main">
+        <div id="statsFlash" class="muted"></div>
+
+        <div class="progress-container">
+          <div class="progress-bar" id="progressBarFlash"></div>
+        </div>
+
+        <div class="card" id="flashCard">Loading...</div>
+
+        <div class="btn-row">
+          <button class="action-btn know" id="btnKnow">Know</button>
+          <button class="action-btn dont" id="btnDont">Don't Know</button>
+
+          <button class="action-btn review" onclick="prevCard()">Prev</button>
+          <button class="action-btn review" onclick="nextCard()">Next</button>
+
+          <button class="action-btn review" id="reviewMissedBtn">Review Missed</button>
+          <button class="action-btn review" id="backAllBtn">All Cards</button>
+        </div>
+      </div>
+
+      <div class="sidebar">
+        <div class="panel">
+          <h3 style="margin:0 0 12px 0;">Stats</h3>
+          <div class="stat-line"><span>Total</span><span id="totalCards">0</span></div>
+          <div class="stat-line"><span>Known</span><span id="knownCount">0</span></div>
+          <div class="stat-line"><span>Missed</span><span id="missedCount">0</span></div>
+        </div>
+
+        <div class="panel">
+          <h3 style="margin:0 0 12px 0;">Notes</h3>
+          <div id="notesList"></div>
+
+          <textarea id="noteInput" placeholder="Write notes here..."></textarea>
+          <button class="small" id="addNoteBtn" style="width:100%; margin-top:10px; background:linear-gradient(90deg,var(--accent1),var(--accent2));">
+            Add Note
+          </button>
+          <div class="muted" style="margin-top:10px; font-size:12px;">
+            Tip: Use Enter for new lines. Edit puts the note back into the box.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- QUIZ VIEW (MULTIPLE CHOICE) -->
+  <div class="view" id="viewQuiz">
+    <div class="container">
+
+      <div class="main">
+        <div class="controls-bar">
+          <select id="questionCount">
+            <option value="10">10 questions</option>
+            <option value="20">20 questions</option>
+            <option value="30">30 questions</option>
+            <option value="50">50 questions</option>
+            <option value="all">All questions</option>
+          </select>
+
+          <select id="mode">
+            <option value="study">Study mode</option>
+            <option value="test">Test mode</option>
+          </select>
+
+          <button class="small" onclick="startQuiz()" style="background:linear-gradient(90deg,var(--accent1),var(--accent2));">
+            Start
+          </button>
+
+          <button class="small" onclick="switchView('flash')">
+            Back to Flashcards
+          </button>
+        </div>
+
+        <div class="progress-container">
+          <div class="progress-bar" id="progressBarQuiz"></div>
+        </div>
+
+        <div class="card" id="quizCard">
+          <div class="muted">Press Start to begin.</div>
+        </div>
+
+        <div class="btn-row">
+          <button class="action-btn review" onclick="quizPrev()">Prev</button>
+          <button class="action-btn review" onclick="quizNext()">Next</button>
+          <button class="action-btn review" onclick="reviewWrong()">Review Wrong</button>
+        </div>
+      </div>
+
+      <div class="sidebar">
+        <div class="panel">
+          <h3 style="margin:0 0 12px 0;">Quiz Stats</h3>
+          <div class="stat-line"><span>Score</span><span id="quizScore">0/0</span></div>
+          <div class="stat-line"><span>Wrong</span><span id="quizWrong">0</span></div>
+          <div class="stat-line"><span>Status</span><span id="quizStatus" class="muted">Idle</span></div>
+        </div>
+
+        <div class="panel">
+          <h3 style="margin:0 0 12px 0;">Rules</h3>
+          <div class="muted" style="line-height:1.5;">
+            • Pick one answer.<br>
+            • In <b>Study</b> mode: shows correct answer if you’re wrong.<br>
+            • In <b>Test</b> mode: only tells you right/wrong (doesn’t reveal correct choice on wrong).<br>
+            • Use Review Wrong at the end or anytime.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- Your data file (must define window.MI_EXAM_QUESTIONS) -->
+<script src="MIexam.js"></script>
+<script>
+
+navigator.serviceWorker.getRegistrations().then(regs => {
+  for (let reg of regs) {
+    reg.unregister();
+  }
+});
+
+caches.keys().then(keys => {
+  keys.forEach(key => caches.delete(key));
+});
+
+</script>
+<script>
+/* =========================
+   SHARED: APP TAB SWITCHING
+========================= */
+function switchView(which){
+  const flash = document.getElementById("viewFlash");
+  const quiz  = document.getElementById("viewQuiz");
+  const tabFlash = document.getElementById("tabFlash");
+  const tabQuiz  = document.getElementById("tabQuiz");
+
+  if(which === "quiz"){
+    flash.classList.remove("active");
+    quiz.classList.add("active");
+    tabFlash.classList.remove("active");
+    tabQuiz.classList.add("active");
+  }else{
+    quiz.classList.remove("active");
+    flash.classList.add("active");
+    tabQuiz.classList.remove("active");
+    tabFlash.classList.add("active");
+  }
+}
+
+/* =========================
+   FLASHCARDS
+========================= */
+let cards = [];
+let index = 0;
+let showingAnswer = false;
+
+let knownCards = new Set();
+let missedCards = new Set();
+let notesData = {};
+let reviewMode = "all";
+
+const flashCardDiv = document.getElementById("flashCard");
+
+function flashInit(){
+  if (!window.MI_EXAM_QUESTIONS || !Array.isArray(window.MI_EXAM_QUESTIONS)) {
+    flashCardDiv.innerHTML = "MIexam.js not loading.";
+    return;
+  }
+
+  cards = window.MI_EXAM_QUESTIONS.map((q,i)=>({
+    id:i,
+    question:q.question,
+    answer:q.correct,
+    explanation:q.explanation||""
+  }));
+
+  showFlashCard();
+  updateFlashStats();
+}
+
+function getFlashList(){
+  if(reviewMode === "missed"){
+    return cards.filter(c => missedCards.has(c.id));
+  }
+  return cards;
+}
+
+function showFlashCard(){
+  const list = getFlashList();
+
+  if(list.length === 0){
+    flashCardDiv.innerHTML = reviewMode === "missed" ? "No missed cards 🎉" : "No cards";
+    document.getElementById("statsFlash").innerText = "";
+    document.getElementById("progressBarFlash").style.width = ((knownCards.size + missedCards.size)/Math.max(cards.length,1))*100 + "%";
+    return;
+  }
+
+  if(index >= list.length) index = 0;
+  if(index < 0) index = 0;
+
+  const card = list[index];
+
+  flashCardDiv.innerHTML = !showingAnswer
+    ? `<strong>Question:</strong><br><br>${card.question}`
+    : `<strong>Answer:</strong><br><br>${card.answer}<br><br><strong>Explanation:</strong><br>${card.explanation}`;
+
+  document.getElementById("statsFlash").innerText = `Card ${index+1} of ${list.length}`;
+
+  document.getElementById("progressBarFlash").style.width =
+    ((knownCards.size + missedCards.size) / Math.max(cards.length,1)) * 100 + "%";
+
+  renderNotes(card.id);
+}
+
+flashCardDiv.addEventListener("click", ()=>{
+  showingAnswer = !showingAnswer;
+  showFlashCard();
+});
+
+document.getElementById("btnKnow").onclick = ()=>{
+  const list = getFlashList();
+  if(list.length === 0) return;
+  const card = list[index];
+
+  knownCards.add(card.id);
+  missedCards.delete(card.id);
+
+  nextCard();
+};
+
+document.getElementById("btnDont").onclick = ()=>{
+  const list = getFlashList();
+  if(list.length === 0) return;
+  const card = list[index];
+
+  missedCards.add(card.id);
+  knownCards.delete(card.id);
+
+  nextCard();
+};
+
+function nextCard(){
+  index++;
+  showingAnswer = false;
+  showFlashCard();
+  updateFlashStats();
+}
+
+function prevCard(){
+  index--;
+  showingAnswer = false;
+  showFlashCard();
+}
+
+document.getElementById("reviewMissedBtn").onclick = ()=>{
+  reviewMode = "missed";
+  index = 0;
+  showingAnswer = false;
+  showFlashCard();
+};
+
+document.getElementById("backAllBtn").onclick = ()=>{
+  reviewMode = "all";
+  index = 0;
+  showingAnswer = false;
+  showFlashCard();
+};
+
+/* Notes add/edit/delete */
+document.getElementById("addNoteBtn").onclick = ()=>{
+  const input = document.getElementById("noteInput");
+  const text = input.value;
+  if(!text.trim()) return;
+
+  const list = getFlashList();
+  if(list.length === 0) return;
+  const cardId = list[index].id;
+
+  if(!notesData[cardId]) notesData[cardId] = [];
+  notesData[cardId].push(text);
+
+  input.value = "";
+  renderNotes(cardId);
+};
+
+function renderNotes(cardId){
+  const list = document.getElementById("notesList");
+  list.innerHTML = "";
+
+  const notes = notesData[cardId] || [];
+
+  notes.forEach((n,i)=>{
+    const div = document.createElement("div");
+    div.className = "note-item";
+
+    const text = document.createElement("div");
+    text.textContent = n;
+    text.style.whiteSpace = "pre-wrap";
+
+    const buttons = document.createElement("div");
+    buttons.style.display = "flex";
+    buttons.style.gap = "8px";
+    buttons.style.marginTop = "8px";
+
+    const edit = document.createElement("button");
+    edit.className = "small";
+    edit.textContent = "Edit";
+    edit.style.background = "linear-gradient(90deg,var(--accent1),var(--accent2))";
+
+    const del = document.createElement("button");
+    del.className = "small";
+    del.textContent = "Delete";
+    del.style.background = "var(--bad)";
+
+    edit.onclick = ()=>{
+      const input = document.getElementById("noteInput");
+      input.value = n;
+      notes.splice(i,1);
+      renderNotes(cardId);
+      input.focus();
+    };
+
+    del.onclick = ()=>{
+      notes.splice(i,1);
+      renderNotes(cardId);
+    };
+
+    buttons.appendChild(edit);
+    buttons.appendChild(del);
+
+    div.appendChild(text);
+    div.appendChild(buttons);
+
+    list.appendChild(div);
+  });
+}
+
+function updateFlashStats(){
+  document.getElementById("totalCards").innerText = cards.length;
+  document.getElementById("knownCount").innerText = knownCards.size;
+  document.getElementById("missedCount").innerText = missedCards.size;
+}
+
+/* =========================
+   QUIZ (MULTIPLE CHOICE)
+========================= */
+let allQuestions = [];
+let quizQuestions = [];
+let quizIndex = 0;
+
+let quizLocked = false;
+let quizMode = "study";
+
+let quizCorrect = 0;
+let quizWrongList = [];
+let quizAnswered = new Set(); // track answered indexes so score is stable
+let quizReviewingWrong = false;
+
+const quizCard = document.getElementById("quizCard");
+
+function quizEnsureData(){
+  if (!window.MI_EXAM_QUESTIONS || !Array.isArray(window.MI_EXAM_QUESTIONS)) {
+    quizCard.innerHTML = "MIexam.js not loading.";
+    return false;
+  }
+  allQuestions = window.MI_EXAM_QUESTIONS.map((q,i)=>({
+    id:i,
+    question:q.question,
+    correct:q.correct,
+    explanation:q.explanation || ""
+  }));
+  return true;
+}
+
+function startQuiz(){
+  if(!quizEnsureData()) return;
+
+  quizMode = document.getElementById("mode").value;
+
+  const countVal = document.getElementById("questionCount").value;
+  const shuffled = [...allQuestions].sort(()=>Math.random()-0.5);
+
+  if(countVal === "all"){
+    quizQuestions = shuffled;
+  }else{
+    quizQuestions = shuffled.slice(0, parseInt(countVal,10));
+  }
+
+  quizIndex = 0;
+  quizLocked = false;
+  quizCorrect = 0;
+  quizWrongList = [];
+  quizAnswered = new Set();
+  quizReviewingWrong = false;
+
+  document.getElementById("quizStatus").textContent = "Running";
+  renderQuiz();
+  updateQuizUI();
+}
+
+function getChoices(correct){
+  // Build 4 unique choices from other correct answers
+  const choices = [correct];
+
+  // Prevent infinite loop if dataset small
+  const pool = allQuestions.map(q => q.correct).filter(Boolean);
+  let guard = 0;
+
+  while(choices.length < 4 && guard < 500){
+    guard++;
+    const r = pool[Math.floor(Math.random()*pool.length)];
+    if(r && !choices.includes(r)) choices.push(r);
+  }
+
+  // If still not enough, duplicate-free fallback (rare)
+  while(choices.length < 4){
+    choices.push(correct);
+  }
+
+  return choices.sort(()=>Math.random()-0.5);
+}
+
+function renderQuiz(){
+  quizLocked = false;
+
+  if(quizQuestions.length === 0){
+    quizCard.innerHTML = `<div class="muted">No questions selected.</div>`;
+    return;
+  }
+
+  if(quizIndex < 0) quizIndex = 0;
+  if(quizIndex >= quizQuestions.length) quizIndex = quizQuestions.length - 1;
+
+  const q = quizQuestions[quizIndex];
+  const choices = getChoices(q.correct);
+
+  const header = `
+    <div class="muted" style="margin-bottom:10px;">
+      Question ${quizIndex+1} / ${quizQuestions.length}
+      ${quizReviewingWrong ? " • Reviewing wrong" : ""}
+    </div>
+    <div class="quiz-question"><b>${escapeHTML(q.question)}</b></div>
+  `;
+
+  let html = header;
+
+  choices.forEach(c=>{
+    html += `<div class="choice" data-choice="${escapeAttr(c)}">${escapeHTML(c)}</div>`;
+  });
+
+  // Explanation area (study mode only shows after select; test mode keeps minimal)
+  html += `<div id="quizExplain" class="muted" style="margin-top:12px;"></div>`;
+
+  quizCard.innerHTML = html;
+
+  // attach listeners
+  document.querySelectorAll(".choice").forEach(el=>{
+    el.addEventListener("click", ()=> quizSelect(el, q));
+  });
+
+  updateQuizUI();
+}
+
+function quizSelect(el, q){
+  if(quizLocked) return;
+  quizLocked = true;
+
+  const selected = el.getAttribute("data-choice") || "";
+  const correct = q.correct || "";
+
+  const choicesEls = Array.from(document.querySelectorAll(".choice"));
+
+  const isCorrect = selected === correct;
+
+  // score only once per question index
+  if(!quizAnswered.has(quizIndex)){
+    quizAnswered.add(quizIndex);
+
+    if(isCorrect){
+      quizCorrect++;
+    }else{
+      // store original question object once
+      quizWrongList.push(q);
+    }
+  }
+
+  if(isCorrect){
+    el.classList.add("correct");
+    document.getElementById("quizExplain").innerHTML =
+      quizMode === "study"
+        ? `<span style="color:#a7f3d0;"><b>Correct.</b></span>${q.explanation ? "<br><br>"+escapeHTML(q.explanation) : ""}`
+        : `<span style="color:#a7f3d0;"><b>Correct.</b></span>`;
+  }else{
+    el.classList.add("wrong");
+
+    if(quizMode === "study"){
+      // reveal correct in study mode
+      choicesEls.forEach(cel=>{
+        if((cel.getAttribute("data-choice")||"") === correct) cel.classList.add("correct");
+      });
+      document.getElementById("quizExplain").innerHTML =
+        `<span style="color:#fecaca;"><b>Wrong.</b></span><br><br><b>Correct:</b> ${escapeHTML(correct)}${q.explanation ? "<br><br>"+escapeHTML(q.explanation) : ""}`;
+    }else{
+      // test mode: do NOT reveal correct
+      document.getElementById("quizExplain").innerHTML =
+        `<span style="color:#fecaca;"><b>Wrong.</b></span>`;
+    }
+  }
+
+  updateQuizUI();
+}
+
+function quizNext(){
+  if(quizQuestions.length === 0) return;
+  if(quizIndex < quizQuestions.length - 1){
+    quizIndex++;
+    renderQuiz();
+  }else{
+    // End reached: show summary
+    quizShowSummary();
+  }
+}
+
+function quizPrev(){
+  if(quizQuestions.length === 0) return;
+  if(quizIndex > 0){
+    quizIndex--;
+    renderQuiz();
+  }
+}
+
+function quizShowSummary(){
+  const total = quizQuestions.length;
+  const wrong = quizWrongList.length;
+  const score = quizCorrect;
+
+  document.getElementById("quizStatus").textContent = "Finished";
+
+  quizCard.innerHTML = `
+    <div style="font-size:20px;"><b>Finished</b></div>
+    <div class="muted" style="margin-top:10px;">
+      Score: <b>${score}</b> / <b>${total}</b><br>
+      Wrong: <b>${wrong}</b><br><br>
+      <button class="small" onclick="reviewWrong()" style="background:linear-gradient(90deg,var(--accent1),var(--accent2));">Review Wrong</button>
+      <button class="small" onclick="startQuiz()" style="margin-left:8px;">Restart</button>
+    </div>
+  `;
+
+  updateQuizUI(true);
+}
+
+function reviewWrong(){
+  if(!quizEnsureData()) return;
+
+  if(quizWrongList.length === 0){
+    quizCard.innerHTML = `<div class="muted">No wrong answers to review 🎉</div>`;
+    document.getElementById("quizStatus").textContent = "No wrong";
+    updateQuizUI();
+    return;
+  }
+
+  // Turn wrong list into a review set (unique by id)
+  const uniq = new Map();
+  quizWrongList.forEach(q => uniq.set(q.id, q));
+  quizQuestions = Array.from(uniq.values());
+
+  quizIndex = 0;
+  quizLocked = false;
+  quizReviewingWrong = true;
+
+  // reset “answered” tracking for review run (score on review not important)
+  quizAnswered = new Set();
+  quizCorrect = 0;
+  quizWrongList = [];
+
+  document.getElementById("quizStatus").textContent = "Reviewing wrong";
+  renderQuiz();
+  updateQuizUI();
+}
+
+function updateQuizUI(forceFinished=false){
+  const total = quizQuestions.length || 0;
+  const scoreText = `${quizCorrect}/${total}`;
+  document.getElementById("quizScore").textContent = scoreText;
+  document.getElementById("quizWrong").textContent = String(quizReviewingWrong ? "-" : quizWrongList.length);
+
+  const prog = total ? ((Math.min(quizIndex+1,total))/total)*100 : 0;
+  document.getElementById("progressBarQuiz").style.width = prog + "%";
+
+  if(forceFinished){
+    document.getElementById("progressBarQuiz").style.width = "100%";
+  }
+}
+
+/* Safety helpers */
+function escapeHTML(s){
+  return String(s ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#39;");
+}
+function escapeAttr(s){
+  // attr-safe (keep it simple)
+  return escapeHTML(s).replaceAll("\n"," ");
+}
+
+/* Boot */
+flashInit();
+</script>
+
+</body>
+</html>
