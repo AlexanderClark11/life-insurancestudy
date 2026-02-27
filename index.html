@@ -593,6 +593,7 @@ function switchView(which){
 let cards = [];
 let index = 0;
 let showingAnswer = false;
+let lastTap = 0;
 
 let knownCards = new Set();
 let missedCards = new Set();
@@ -661,14 +662,16 @@ function showFlashCard(){
   renderNotes(card.id);
 }
 
-flashCardDiv.addEventListener("click", (e)=>{
-
+flashCardDiv.addEventListener("click", (e) => {
   e.preventDefault();
 
+  const now = Date.now();
+  // block accidental double-fire taps (common on mobile)
+  if (now - lastTap < 250) return;
+  lastTap = now;
+
   showingAnswer = !showingAnswer;
-
   showFlashCard();
-
 });
 
 document.getElementById("btnKnow").onclick = ()=>{
